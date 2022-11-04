@@ -238,7 +238,27 @@ async fn output_preparation() -> Result<()> {
     assert_eq!(features.len(), 1);
     assert_eq!(features.sender().unwrap().address(), &expected_address);
 
-    // error when adding issuer when building basic output
+    // fails if _test is not of Error type
+
+    let _test = account
+        .prepare_output(
+            OutputOptions {
+                recipient_address: recipient_address.clone(),
+                amount: 500000,
+                assets: None,
+                features: Some(Features {
+                    metadata: None,
+                    tag: None,
+                    issuer: Some(issuer_and_sender_address.clone()),
+                    sender: None,
+                }),
+                unlocks: None,
+                storage_deposit: None,
+            },
+            None,
+        )
+        .await
+        .unwrap_err();
 
     // issuer and sender address present when building nft output
     let output = account
