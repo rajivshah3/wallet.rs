@@ -9,7 +9,11 @@ use std::sync::{
     Arc,
 };
 
-use iota_client::{secret::SecretManager, Client, NodeInfoWrapper};
+use iota_client::{
+    secret::SecretManager,
+    Client,
+    NodeInfoWrapper,
+};
 #[cfg(feature = "events")]
 use tokio::sync::Mutex;
 use tokio::sync::RwLock;

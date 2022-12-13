@@ -7,7 +7,7 @@ use std::{
 };
 
 #[cfg(feature = "participation")]
-use iota_client::{node_api::participation::types::EventId, node_manager::node::Node};
+use iota_client::{node_api::participation::types::{EventId, ParticipationEventType}, node_manager::node::Node};
 use iota_client::{node_manager::node::NodeAuth, secret::GenerateAddressOptions};
 use serde::{Deserialize, Serialize};
 
@@ -149,6 +149,12 @@ pub enum Message {
         /// Node authentication
         auth: Option<NodeAuth>,
     },
+    /// Get the node participation events
+    /// Expected response: [`Events`](crate::message_interface::Response::Events)
+    GetNodeParticipationEvents {
+        #[serde(rename = "eventType")]
+        event_type: ParticipationEventType,
+    },
     /// Set the stronghold password.
     /// Expected response: [`Ok`](crate::message_interface::Response::Ok)
     SetStrongholdPassword(String),
@@ -286,6 +292,7 @@ impl Debug for Message {
                 account_index, internal, address_index, options, bech32_hrp
             ),
             Message::GetNodeInfo { url, auth: _ } => write!(f, "GetNodeInfo{{ url: {:?} }}", url),
+            Message::GetNodeParticipationEvents { event_type } => write!(f, "GetNodeParticipationEvents{{ event_type: {:?} }}", event_type),
             Message::SetStrongholdPassword(_) => write!(f, "SetStrongholdPassword(<omitted>)"),
             Message::SetStrongholdPasswordClearInterval(interval_in_milliseconds) => {
                 write!(f, "SetStrongholdPassword({:?})", interval_in_milliseconds)

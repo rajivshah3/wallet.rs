@@ -22,6 +22,7 @@ use iota_client::{
         payload::transaction::dto::TransactionPayloadDto,
         DtoError,
     },
+    node_api::participation::responses::EventsResponse,
     constants::SHIMMER_TESTNET_BECH32_HRP,
     request_funds_from_faucet, utils, Client, NodeInfoWrapper,
 };
@@ -260,6 +261,13 @@ impl WalletMessageHandler {
                         }
                         None => self.account_manager.get_node_info().await.map(Response::NodeInfo),
                     }
+                })
+                .await
+            }
+            Message::GetNodeParticipationEvents { event_type } => {
+                convert_async_panics(|| async {
+                    let events = self.account_manager.get_node_participation_events(event_type).await?;
+                    Ok(Response::Events(EventsResponse { events }))
                 })
                 .await
             }

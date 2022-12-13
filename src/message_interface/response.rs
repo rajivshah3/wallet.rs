@@ -13,6 +13,7 @@ use iota_client::{
         payload::transaction::{dto::TransactionPayloadDto, TransactionId},
         BlockId,
     },
+    node_api::participation::responses::EventsResponse,
     NodeInfoWrapper,
 };
 use serde::Serialize;
@@ -137,6 +138,8 @@ pub enum Response {
     GeneratedMnemonic(String),
     /// Response for [`GetNodeInfo`](crate::message_interface::Message::GetNodeInfo)
     NodeInfo(NodeInfoWrapper),
+    /// Response for [`GetNodeParticipationEvents`](crate::message_interface::Message::GetNodeParticipationEvents)
+    Events(EventsResponse),
     /// Response for
     /// [`GetParticipationEvent`](crate::message_interface::GetParticipationEvent)
     /// [`RegisterParticipationEvent`](crate::message_interface::RegisterParticipationEvent)
@@ -228,6 +231,7 @@ impl Debug for Response {
             #[cfg(feature = "ledger_nano")]
             Response::LedgerNanoStatus(ledger_nano_status) => write!(f, "LedgerNanoStatus({:?})", ledger_nano_status),
             Response::NodeInfo(info) => write!(f, "NodeInfo({:?})", info),
+            Response::Events(events) => write!(f, "Events({:?})", events),
             Response::HexAddress(hex_address) => write!(f, "Hex encoded address({:?})", hex_address),
             Response::Bech32Address(bech32_address) => write!(f, "Bech32 encoded address({:?})", bech32_address),
             Response::Ok(()) => write!(f, "Ok(())"),

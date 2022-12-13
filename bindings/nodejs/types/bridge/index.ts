@@ -64,6 +64,7 @@ import type {
     __GetLedgerNanoStatusMessage__,
     __GenerateAddressMessage__,
     __GetNodeInfoMessage__,
+    __GetNodeParticipationEvents__,
     __HexToBech32__,
     __IsStrongholdPasswordAvailableMessage__,
     __RecoverAccountsMessage__,
@@ -158,6 +159,7 @@ export type __Message__ =
     | __GetLedgerNanoStatusMessage__
     | __GenerateAddressMessage__
     | __GetNodeInfoMessage__
+    | __GetNodeParticipationEvents__
     | __GetParticipationEventMessage__
     | __GetParticipationEventsMessage__
     | __GetParticipationEventStatusMessage__

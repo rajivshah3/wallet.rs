@@ -19,6 +19,7 @@ The AccountManager class.
 - [getAccounts](AccountManager.md#getaccounts)
 - [generateAddress](AccountManager.md#generateaddress)
 - [getNodeInfo](AccountManager.md#getnodeinfo)
+- [getNodeParticipationEvents](AccountManager.md#getnodeparticipationevents)
 - [getLedgerNanoStatus](AccountManager.md#getledgernanostatus)
 - [hexToBech32](AccountManager.md#hextobech32)
 - [isStrongholdPasswordAvailable](AccountManager.md#isstrongholdpasswordavailable)
@@ -245,6 +246,24 @@ Get the node info.
 #### Returns
 
 `Promise`<[`NodeInfoWrapper`](../interfaces/NodeInfoWrapper.md)\>
+
+___
+
+### getNodeParticipationEvents
+
+▸ **getNodeParticipationEvents**(`event_type`): `Promise`<`EventsResponse`\>
+
+Get the node participation events.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `event_type` | `ParticipationEventType` |
+
+#### Returns
+
+`Promise`<`EventsResponse`\>
 
 ___
 

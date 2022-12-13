@@ -90,6 +90,13 @@ export type __GetNodeInfoMessage__ = {
     };
 };
 
+export type __GetNodeParticipationEvents__ = {
+    cmd: 'getNodeParticipationEvents';
+    payload: {
+        eventType?: 0 | 1;
+    };
+};
+
 export type __GetParticipationEventMessage__ = {
     cmd: 'getParticipationEvent';
     payload: {

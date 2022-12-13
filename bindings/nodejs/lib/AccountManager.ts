@@ -206,6 +206,17 @@ export class AccountManager {
         return JSON.parse(response).payload;
     }
 
+        /**
+     * Get the node participation events.
+     */
+    async getNodeParticipationEvents(eventType: 0 | 1): Promise<{ events: string[] }> {
+        const response = await this.messageHandler.sendMessage({
+            cmd: 'getNodeParticipationEvents',
+            payload: { eventType },
+        });
+        return JSON.parse(response).payload;
+    }
+
     /**
      * Get the status for a Ledger Nano.
      */
