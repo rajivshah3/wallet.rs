@@ -47,6 +47,11 @@ jobs:
       run: echo "LIBCLANG_PATH=$((gcm clang).source -replace "clang.exe")" >> $env:GITHUB_ENV
       if: matrix.os == 'windows-latest'
 
+    - name: Set up sccache
+      uses: metalbear-co/sccache-action@5d5f1a38d93640203b0f09627e2cd34064c7cf43
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Get current date
       run: echo "CURRENT_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
       if: matrix.os == 'macos-latest' || matrix.os == 'ubuntu-latest'
@@ -81,16 +86,6 @@ jobs:
         restore-keys: |
           ${{ matrix.os }}-stable-cargo-index-${{ hashFiles('**/Cargo.lock') }}
           ${{ matrix.os }}-stable-cargo-index-
-    - name: Cache cargo target
-      uses: actions/cache@v3
-      with:
-        path: target
-        # Add date to the cache to keep it up to date
-        key: ${{ matrix.os }}-stable-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}-${{ env.CURRENT_DATE }}
-        # Restore from outdated cache for speed
-        restore-keys: |
-          ${{ matrix.os }}-stable-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
-          ${{ matrix.os }}-stable-cargo-build-target-
 
     - name: Run tests
       timeout-minutes: 60
@@ -139,6 +134,11 @@ jobs:
         with:
           python-version: '3.10'
 
+      - name: Set up sccache
+        uses: metalbear-co/sccache-action@5d5f1a38d93640203b0f09627e2cd34064c7cf43
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Get current date
         run: echo "CURRENT_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
         if: matrix.os == 'macos-latest' || matrix.os == 'ubuntu-latest'
@@ -175,21 +175,21 @@ jobs:
             ${{ matrix.os }}-stable-cargo-index-${{ hashFiles('**/Cargo.lock') }}
             ${{ matrix.os }}-stable-cargo-index-
      
-      - name: Cache nodejs binding cargo target
-        uses: actions/cache@v3
-        if: matrix.os != 'windows-latest'
-        # We get a linker error on Windows when using the cache (LNK1181: cannot open input file 'node.lib')
-        # https://github.com/iotaledger/wallet.rs/pull/467/checks?check_run_id=2214108362#step:11:41
-        with:
-          path: |
-            bindings/nodejs/target
-            bindings/nodejs/artifacts.json
-          # Add date to the cache to keep it up to date
-          key: ${{ matrix.os }}-stable-cargo-build-node-target-${{ hashFiles('**/Cargo.lock') }}-${{ env.CURRENT_DATE }}
-          # Restore from outdated cache for speed
-          restore-keys: |
-            ${{ matrix.os }}-stable-cargo-build-node-target-${{ hashFiles('**/Cargo.lock') }}
-            ${{ matrix.os }}-stable-cargo-build-node-target-
+      # - name: Cache nodejs binding cargo target
+      #   uses: actions/cache@v3
+      #   if: matrix.os != 'windows-latest'
+      #   # We get a linker error on Windows when using the cache (LNK1181: cannot open input file 'node.lib')
+      #   # https://github.com/iotaledger/wallet.rs/pull/467/checks?check_run_id=2214108362#step:11:41
+      #   with:
+      #     path: |
+      #       bindings/nodejs/target
+      #       bindings/nodejs/artifacts.json
+      #     # Add date to the cache to keep it up to date
+      #     key: ${{ matrix.os }}-stable-cargo-build-node-target-${{ hashFiles('**/Cargo.lock') }}-${{ env.CURRENT_DATE }}
+      #     # Restore from outdated cache for speed
+      #     restore-keys: |
+      #       ${{ matrix.os }}-stable-cargo-build-node-target-${{ hashFiles('**/Cargo.lock') }}
+      #       ${{ matrix.os }}-stable-cargo-build-node-target-
 
       - name: Build nodejs binding
         run: npm ci --build-from-source
@@ -292,6 +292,11 @@ jobs:
       run: echo "LIBCLANG_PATH=$((gcm clang).source -replace "clang.exe")" >> $env:GITHUB_ENV
       if: matrix.os == 'windows-latest'
 
+    - name: Set up sccache
+      uses: metalbear-co/sccache-action@5d5f1a38d93640203b0f09627e2cd34064c7cf43
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Get current date
       run: echo "CURRENT_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
       if: matrix.os == 'macos-latest' || matrix.os == 'ubuntu-latest'
@@ -337,17 +342,6 @@ jobs:
         restore-keys: |
           ${{ matrix.os }}-stable-cargo-index-${{ hashFiles('**/Cargo.lock') }}
           ${{ matrix.os }}-stable-cargo-index-
-    
-    - name: Cache python binding cargo target
-      uses: actions/cache@v3
-      with:
-        path: bindings/python/target
-        # Add date to the cache to keep it up to date
-        key: ${{ matrix.os }}-stable-cargo-build-python-target-${{ hashFiles('**/Cargo.lock') }}-${{ env.CURRENT_DATE }}
-        # Restore from outdated cache for speed
-        restore-keys: |
-          ${{ matrix.os }}-stable-cargo-build-python-target-${{ hashFiles('**/Cargo.lock') }}
-          ${{ matrix.os }}-stable-cargo-build-python-target-
 
     - name: Build and test python binding
       run: tox
@@ -381,6 +375,11 @@ jobs:
       - name: Set LIBCLANG_PATH (Windows)
         run: echo "LIBCLANG_PATH=$((gcm clang).source -replace "clang.exe")" >> $env:GITHUB_ENV
         if: matrix.os == 'windows-2019'
+
+      - name: Set up sccache
+        uses: metalbear-co/sccache-action@5d5f1a38d93640203b0f09627e2cd34064c7cf43
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get current date
         run: echo "CURRENT_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
