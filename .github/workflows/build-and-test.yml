@@ -26,6 +26,9 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
+    env:
+      SCCACHE_ERROR_LOG: /tmp/sccache-${{ matrix.os }}.log
+      SCCACHE_LOG: "debug,sccache::commands=warn,sccache::config=warn"
 
     steps:
     - uses: actions/checkout@v3
@@ -93,6 +96,11 @@ jobs:
       with:
         command: test
         args: --all-features --release
+
+    - uses: actions/upload-artifact@v3
+      with:
+        name: sccache-${{ matrix.os }}
+        path: ${{ env.SCCACHE_ERROR_LOG }}
 
   nodejs-bindings:
     runs-on: ${{ matrix.os }}
