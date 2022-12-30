@@ -47,7 +47,14 @@ jobs:
       run: echo "LIBCLANG_PATH=$((gcm clang).source -replace "clang.exe")" >> $env:GITHUB_ENV
       if: matrix.os == 'windows-latest'
     
-    - name: Set sccache log settings
+    - name: Set sccache log settings (Linux/macOS)
+      if: matrix.os != 'windows-latest'
+      run: |
+        echo "SCCACHE_ERROR_LOG=${{ runner.temp }}/sccache-${{ matrix.os }}.log" >> $GITHUB_ENV
+        echo "SCCACHE_LOG=debug,sccache::commands=warn,sccache::config=warn" >> $GITHUB_ENV
+    
+    - name: Set sccache log settings (Windows)
+      if: matrix.os == 'windows-latest'
       run: |
         echo "SCCACHE_ERROR_LOG=${{ runner.temp }}/sccache-${{ matrix.os }}.log" >> $env:GITHUB_ENV
         echo "SCCACHE_LOG=debug,sccache::commands=warn,sccache::config=warn" >> $env:GITHUB_ENV
@@ -101,10 +108,11 @@ jobs:
         command: test
         args: --all-features --release
 
-    - uses: actions/upload-artifact@v3
+    - name: Upload sccache log
+      uses: actions/upload-artifact@v3
       if: ${{ always() }}
       with:
-        name: sccache-${{ matrix.os }}
+        name: sccache-crate-${{ matrix.os }}
         path: ${{ env.SCCACHE_ERROR_LOG }}
 
   nodejs-bindings:
@@ -147,10 +155,24 @@ jobs:
         with:
           python-version: '3.10'
 
+      - name: Set sccache log settings (Linux/macOS)
+        if: matrix.os != 'windows-latest'
+        run: |
+          echo "SCCACHE_ERROR_LOG=${{ runner.temp }}/sccache-${{ matrix.os }}.log" >> $GITHUB_ENV
+          echo "SCCACHE_LOG=debug,sccache::commands=warn,sccache::config=warn" >> $GITHUB_ENV
+      
+      - name: Set sccache log settings (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          echo "SCCACHE_ERROR_LOG=${{ runner.temp }}/sccache-${{ matrix.os }}.log" >> $env:GITHUB_ENV
+          echo "SCCACHE_LOG=debug,sccache::commands=warn,sccache::config=warn" >> $env:GITHUB_ENV
+
       - name: Set up sccache
-        uses: metalbear-co/sccache-action@5d5f1a38d93640203b0f09627e2cd34064c7cf43
+        uses: rajivshah3/sccache-action@7cd10d4e6ec850ed70998613ec3c65ca018448fe
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          cache-from: sccache-stable-${{ matrix.os }}-
+          cache-to: sccache-stable-${{ matrix.os }}-latest
 
       - name: Get current date
         run: echo "CURRENT_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
@@ -207,6 +229,13 @@ jobs:
       - name: Build nodejs binding
         run: npm ci --build-from-source
         working-directory: bindings/nodejs
+
+      - name: Upload sccache log
+        uses: actions/upload-artifact@v3
+        if: ${{ always() }}
+        with:
+          name: sccache-nodejs-${{ matrix.os }}
+          path: ${{ env.SCCACHE_ERROR_LOG }}
 
   swift-bindings:
     runs-on: ${{ matrix.os }}
@@ -305,10 +334,24 @@ jobs:
       run: echo "LIBCLANG_PATH=$((gcm clang).source -replace "clang.exe")" >> $env:GITHUB_ENV
       if: matrix.os == 'windows-latest'
 
+    - name: Set sccache log settings (Linux/macOS)
+      if: matrix.os != 'windows-latest'
+      run: |
+        echo "SCCACHE_ERROR_LOG=${{ runner.temp }}/sccache-${{ matrix.os }}.log" >> $GITHUB_ENV
+        echo "SCCACHE_LOG=debug,sccache::commands=warn,sccache::config=warn" >> $GITHUB_ENV
+    
+    - name: Set sccache log settings (Windows)
+      if: matrix.os == 'windows-latest'
+      run: |
+        echo "SCCACHE_ERROR_LOG=${{ runner.temp }}/sccache-${{ matrix.os }}.log" >> $env:GITHUB_ENV
+        echo "SCCACHE_LOG=debug,sccache::commands=warn,sccache::config=warn" >> $env:GITHUB_ENV
+
     - name: Set up sccache
-      uses: metalbear-co/sccache-action@5d5f1a38d93640203b0f09627e2cd34064c7cf43
+      uses: rajivshah3/sccache-action@7cd10d4e6ec850ed70998613ec3c65ca018448fe
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
+        cache-from: sccache-stable-${{ matrix.os }}-
+        cache-to: sccache-stable-${{ matrix.os }}-latest
 
     - name: Get current date
       run: echo "CURRENT_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
@@ -359,6 +402,13 @@ jobs:
     - name: Build and test python binding
       run: tox
       working-directory: bindings/python
+    
+    - name: Upload sccache log
+      uses: actions/upload-artifact@v3
+      if: ${{ always() }}
+      with:
+        name: sccache-python-${{ matrix.os }}
+        path: ${{ env.SCCACHE_ERROR_LOG }}
 
   test-java:
     name: Test Java binding
@@ -389,10 +439,24 @@ jobs:
         run: echo "LIBCLANG_PATH=$((gcm clang).source -replace "clang.exe")" >> $env:GITHUB_ENV
         if: matrix.os == 'windows-2019'
 
+      - name: Set sccache log settings (Linux/macOS)
+        if: matrix.os != 'windows-latest'
+        run: |
+          echo "SCCACHE_ERROR_LOG=${{ runner.temp }}/sccache-${{ matrix.os }}.log" >> $GITHUB_ENV
+          echo "SCCACHE_LOG=debug,sccache::commands=warn,sccache::config=warn" >> $GITHUB_ENV
+      
+      - name: Set sccache log settings (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          echo "SCCACHE_ERROR_LOG=${{ runner.temp }}/sccache-${{ matrix.os }}.log" >> $env:GITHUB_ENV
+          echo "SCCACHE_LOG=debug,sccache::commands=warn,sccache::config=warn" >> $env:GITHUB_ENV
+
       - name: Set up sccache
-        uses: metalbear-co/sccache-action@5d5f1a38d93640203b0f09627e2cd34064c7cf43
+        uses: rajivshah3/sccache-action@7cd10d4e6ec850ed70998613ec3c65ca018448fe
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          cache-from: sccache-stable-${{ matrix.os }}-
+          cache-to: sccache-stable-${{ matrix.os }}-latest
 
       - name: Get current date
         run: echo "CURRENT_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
@@ -442,3 +506,10 @@ jobs:
         run: |
           chmod +x gradlew
           ./gradlew test -i
+      
+      - name: Upload sccache log
+        uses: actions/upload-artifact@v3
+        if: ${{ always() }}
+        with:
+          name: sccache-java-${{ matrix.os }}
+          path: ${{ env.SCCACHE_ERROR_LOG }}
