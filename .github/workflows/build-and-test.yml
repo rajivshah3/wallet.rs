@@ -53,9 +53,11 @@ jobs:
         echo "SCCACHE_LOG=debug,sccache::commands=warn,sccache::config=warn" >> $env:GITHUB_ENV
 
     - name: Set up sccache
-      uses: metalbear-co/sccache-action@5d5f1a38d93640203b0f09627e2cd34064c7cf43
+      uses: rajivshah3/sccache-action@7cd10d4e6ec850ed70998613ec3c65ca018448fe
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
+        cache-from: sccache-stable-${{ matrix.os }}-
+        cache-to: sccache-stable-${{ matrix.os }}-latest
 
     - name: Get current date
       run: echo "CURRENT_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
