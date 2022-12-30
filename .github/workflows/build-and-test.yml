@@ -26,9 +26,6 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-    env:
-      SCCACHE_ERROR_LOG: /tmp/sccache-${{ matrix.os }}.log
-      SCCACHE_LOG: "debug,sccache::commands=warn,sccache::config=warn"
 
     steps:
     - uses: actions/checkout@v3
@@ -49,6 +46,11 @@ jobs:
     - name: Set LIBCLANG_PATH (Windows)
       run: echo "LIBCLANG_PATH=$((gcm clang).source -replace "clang.exe")" >> $env:GITHUB_ENV
       if: matrix.os == 'windows-latest'
+    
+    - name: Set sccache log settings
+      run: |
+        echo "SCCACHE_ERROR_LOG=${{ runner.temp }}/sccache-${{ matrix.os }}.log" >> $env:GITHUB_ENV
+        echo "SCCACHE_LOG=debug,sccache::commands=warn,sccache::config=warn" >> $env:GITHUB_ENV
 
     - name: Set up sccache
       uses: metalbear-co/sccache-action@5d5f1a38d93640203b0f09627e2cd34064c7cf43
