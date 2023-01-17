@@ -45,17 +45,18 @@ import type {
     __SyncAccountMethod__,
     __GetIncomingTransactionDataMethod__,
     __VoteMethod__,
-    __StopParticipatingMethod__,
     __GetVotingPowerMethod__,
     __GetParticipationOverviewMethod__,
     __IncreaseVotingPowerMethod__,
     __DecreaseVotingPowerMethod__,
+    __StopParticipatingMethod__,
 } from './account';
 import type {
     __BackupMessage__,
     __Bech32ToHex__,
     __ChangeStrongholdPasswordMessage__,
     __ClearStrongholdPasswordMessage__,
+    __ClearListenersMessage__,
     __CreateAccountMessage__,
     __EmitTestEventMessage__,
     __GenerateMnemonicMessage__,
@@ -82,6 +83,7 @@ import type {
     __GetParticipationEventMessage__,
     __GetParticipationEventsMessage__,
     __GetParticipationEventStatusMessage__,
+    __GetParticipationEventIdsMessage__,
 } from './accountManager';
 
 export type __AccountMethod__ =
@@ -149,6 +151,7 @@ export type __Message__ =
     | __Bech32ToHex__
     | __CallAccountMethodMessage__
     | __ChangeStrongholdPasswordMessage__
+    | __ClearListenersMessage__
     | __ClearStrongholdPasswordMessage__
     | __CreateAccountMessage__
     | __DeregisterParticipationEvent__
@@ -161,6 +164,7 @@ export type __Message__ =
     | __GenerateAddressMessage__
     | __GetNodeInfoMessage__
     | __GetParticipationEventMessage__
+    | __GetParticipationEventIdsMessage__
     | __GetParticipationEventsMessage__
     | __GetParticipationEventStatusMessage__
     | __HexToBech32__

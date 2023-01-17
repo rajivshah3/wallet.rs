@@ -7,7 +7,10 @@ use std::{
 };
 
 #[cfg(feature = "participation")]
-use iota_client::{node_api::participation::types::EventId, node_manager::node::Node};
+use iota_client::{
+    node_api::participation::types::{ParticipationEventId, ParticipationEventType},
+    node_manager::node::Node,
+};
 use iota_client::{node_manager::node::NodeAuth, secret::GenerateAddressOptions};
 use serde::{Deserialize, Serialize};
 
@@ -197,7 +200,7 @@ pub enum Message {
     #[cfg(feature = "participation")]
     RegisterParticipationEvent {
         #[serde(rename = "eventId")]
-        event_id: EventId,
+        event_id: ParticipationEventId,
         nodes: Vec<Node>,
     },
     /// Removes a previously registered participation event from local storage.
@@ -205,19 +208,22 @@ pub enum Message {
     #[cfg(feature = "participation")]
     DeregisterParticipationEvent {
         #[serde(rename = "eventId")]
-        event_id: EventId,
+        event_id: ParticipationEventId,
     },
     /// Expected response: [`ParticipationEvent`](crate::message_interface::Response::ParticipationEvent)
     #[cfg(feature = "participation")]
     GetParticipationEvent {
         #[serde(rename = "eventId")]
-        event_id: EventId,
+        event_id: ParticipationEventId,
     },
+    /// Expected response: [`ParticipationEventIds`](crate::message_interface::Response::ParticipationEventIds)
+    #[cfg(feature = "participation")]
+    GetParticipationEventIds(Option<ParticipationEventType>),
     /// Expected response: [`ParticipationEventStatus`](crate::message_interface::Response::ParticipationEventStatus)
     #[cfg(feature = "participation")]
     GetParticipationEventStatus {
         #[serde(rename = "eventId")]
-        event_id: EventId,
+        event_id: ParticipationEventId,
     },
     /// Expected response: [`ParticipationEvents`](crate::message_interface::Response::ParticipationEvents)
     #[cfg(feature = "participation")]
@@ -319,6 +325,10 @@ impl Debug for Message {
             #[cfg(feature = "participation")]
             Message::GetParticipationEvent { event_id } => {
                 write!(f, "GetParticipationEvent({event_id:?})")
+            }
+            #[cfg(feature = "participation")]
+            Message::GetParticipationEventIds(event_type) => {
+                write!(f, "GetParticipationEventIds({event_type:?})")
             }
             #[cfg(feature = "participation")]
             Message::GetParticipationEventStatus { event_id } => {

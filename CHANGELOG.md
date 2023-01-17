@@ -19,6 +19,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security -->
 
+## 1.0.0-rc.5 - YYYY-MM-DD
+
+### Added
+
+- `AccountManager::get_participation_event_ids` method;
+- `RequiredStorageDeposit::{alias(), basic(), foundry(), nft()}` getters;
+- `TransactionOptionsDto`;
+
+### Changed
+
+- Updated dependencies;
+- Message interface methods to accept `TransactionOptionsDto` instead of `TransactionOptions`;
+- `send_message` to return Option which is None when no message response is received;
+- Moved `init_logger` to message interface mod;
+- Limit max parallel requests for incoming transactions;
+
+### Removed
+
+- `clear_listeners` from the `WalletMessageHandler`;
+
 ## 1.0.0-rc.4 - 2022-12-23
 
 ### Added
@@ -45,7 +65,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-- `clear_listeners` from message interface;
 - `listen` from message interface;
 - default bech32 HRP in account builder;
 - `Copy` from `FilterOptions`;

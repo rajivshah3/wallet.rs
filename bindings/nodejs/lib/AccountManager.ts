@@ -6,20 +6,21 @@ import { Account } from './Account';
 
 import type {
     AccountId,
-    Auth,
-    EventType,
     AccountManagerOptions,
-    CreateAccountPayload,
-    NodeInfoWrapper,
-    ClientOptions,
     AccountSyncOptions,
-    WalletEvent,
-    LedgerNanoStatus,
-    Event,
-    EventId,
-    Node,
-    EventStatus,
+    Auth,
+    ClientOptions,
+    CreateAccountPayload,
+    ParticipationEvent,
+    ParticipationEventId,
+    ParticipationEventStatus,
+    EventType,
     GenerateAddressOptions,
+    LedgerNanoStatus,
+    Node,
+    NodeInfoWrapper,
+    ParticipationEventType,
+    WalletEvent,
 } from '../types';
 
 /** The AccountManager class. */
@@ -97,7 +98,7 @@ export class AccountManager {
         this.messageHandler.destroy();
     }
 
-    async deregisterParticipationEvent(eventId: EventId): Promise<void> {
+    async deregisterParticipationEvent(eventId: ParticipationEventId): Promise<void> {
         await this.messageHandler.sendMessage({
             cmd: 'deregisterParticipationEvent',
             payload: {
@@ -216,7 +217,7 @@ export class AccountManager {
         return JSON.parse(response).payload;
     }
 
-    async getParticipationEvent(eventId: EventId): Promise<Event> {
+    async getParticipationEvent(eventId: ParticipationEventId): Promise<ParticipationEvent> {
         const response = await this.messageHandler.sendMessage({
             cmd: 'getParticipationEvent',
             payload: {
@@ -226,14 +227,24 @@ export class AccountManager {
         return JSON.parse(response).payload;
     }
 
-    async getParticipationEvents(): Promise<Event[]> {
+    async getParticipationEventIds(eventType?: ParticipationEventType): Promise<ParticipationEventId[]> {
+        const response = await this.messageHandler.sendMessage({
+            cmd: 'getParticipationEventIds',
+            payload: {
+                eventType,
+            },
+        });
+        return JSON.parse(response).payload;
+    }
+
+    async getParticipationEvents(): Promise<ParticipationEvent[]> {
         const response = await this.messageHandler.sendMessage({
             cmd: 'getParticipationEvents',
         });
         return JSON.parse(response).payload;
     }
 
-    async getParticipationEventStatus(eventId: EventId): Promise<EventStatus> {
+    async getParticipationEventStatus(eventId: ParticipationEventId): Promise<ParticipationEventStatus> {
         const response = await this.messageHandler.sendMessage({
             cmd: 'getParticipationEventStatus',
             payload: {
@@ -279,8 +290,12 @@ export class AccountManager {
     /**
      * Clear the callbacks for provided events. An empty array will clear all listeners.
      */
-    clearListeners(eventTypes: EventType[]): void {
-        return this.messageHandler.clearListeners(eventTypes);
+    async clearListeners(eventTypes: EventType[]): Promise<void> {
+        const response = await this.messageHandler.sendMessage({
+            cmd: 'clearListeners',
+            payload: eventTypes
+        });
+        return JSON.parse(response).payload;
     }
 
     /**
@@ -320,9 +335,9 @@ export class AccountManager {
     }
 
     async registerParticipationEvent(
-        eventId: EventId,
+        eventId: ParticipationEventId,
         nodes: Node[],
-    ): Promise<Event> {
+    ): Promise<ParticipationEvent> {
         const response = await this.messageHandler.sendMessage({
             cmd: 'registerParticipationEvent',
             payload: {
