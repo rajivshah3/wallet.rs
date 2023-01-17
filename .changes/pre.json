@@ -3,6 +3,7 @@
   "changes": [
     ".changes/account-bech32-hrp.md",
     ".changes/account-recovery.md",
+    ".changes/clearlistener-move.md",
     ".changes/downgrade-rocksb.md",
     ".changes/expose-participation-type.md",
     ".changes/faucet.md",
@@ -22,6 +23,7 @@
     ".changes/outputTypesFilter.md",
     ".changes/participation-events-empty-array.md",
     ".changes/participation-on-account-manager.md",
+    ".changes/participation-rename.md",
     ".changes/participation-types.md",
     ".changes/prebuild.md",
     ".changes/private-account-meta.md",
