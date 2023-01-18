@@ -60,11 +60,9 @@ jobs:
         echo "SCCACHE_LOG=debug,sccache::commands=warn,sccache::config=warn" >> $env:GITHUB_ENV
 
     - name: Set up sccache
-      uses: rajivshah3/sccache-action@7cd10d4e6ec850ed70998613ec3c65ca018448fe
+      uses: rajivshah3/sccache-action@a0c434fcdd22ba1bf3cfd93ea990b3dddfe69689
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        cache-from: sccache-stable-${{ matrix.os }}-
-        cache-to: sccache-stable-${{ matrix.os }}-latest
 
     - name: Get current date
       run: echo "CURRENT_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
@@ -168,11 +166,9 @@ jobs:
           echo "SCCACHE_LOG=debug,sccache::commands=warn,sccache::config=warn" >> $env:GITHUB_ENV
 
       - name: Set up sccache
-        uses: rajivshah3/sccache-action@7cd10d4e6ec850ed70998613ec3c65ca018448fe
+        uses: rajivshah3/sccache-action@a0c434fcdd22ba1bf3cfd93ea990b3dddfe69689
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          cache-from: sccache-stable-${{ matrix.os }}-
-          cache-to: sccache-stable-${{ matrix.os }}-latest
 
       - name: Get current date
         run: echo "CURRENT_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
@@ -347,11 +343,9 @@ jobs:
         echo "SCCACHE_LOG=debug,sccache::commands=warn,sccache::config=warn" >> $env:GITHUB_ENV
 
     - name: Set up sccache
-      uses: rajivshah3/sccache-action@7cd10d4e6ec850ed70998613ec3c65ca018448fe
+      uses: rajivshah3/sccache-action@a0c434fcdd22ba1bf3cfd93ea990b3dddfe69689
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        cache-from: sccache-stable-${{ matrix.os }}-
-        cache-to: sccache-stable-${{ matrix.os }}-latest
 
     - name: Get current date
       run: echo "CURRENT_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
@@ -452,11 +446,9 @@ jobs:
           echo "SCCACHE_LOG=debug,sccache::commands=warn,sccache::config=warn" >> $env:GITHUB_ENV
 
       - name: Set up sccache
-        uses: rajivshah3/sccache-action@7cd10d4e6ec850ed70998613ec3c65ca018448fe
+        uses: rajivshah3/sccache-action@a0c434fcdd22ba1bf3cfd93ea990b3dddfe69689
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          cache-from: sccache-stable-${{ matrix.os }}-
-          cache-to: sccache-stable-${{ matrix.os }}-latest
 
       - name: Get current date
         run: echo "CURRENT_DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
